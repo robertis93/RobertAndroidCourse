@@ -9,10 +9,10 @@ import com.example.robertandroidcourse2021.ContactModel
 import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
 
 
-//1
+
 class ContactDetailsFragment : Fragment() {
 
-  //2
+
   companion object {
 
     private const val CONTACTMODEL = "model"
@@ -26,7 +26,7 @@ class ContactDetailsFragment : Fragment() {
     }
   }
 
-  //3
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     val fragmentDogDetailsBinding =
