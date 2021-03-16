@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
 
-class MainActivity : AppCompatActivity(), ContactListFragment.onContactSelected {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -13,20 +13,23 @@ class MainActivity : AppCompatActivity(), ContactListFragment.onContactSelected 
 
         if (savedInstanceState == null) {
             supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.root_layout, ContactListFragment.newInstance(), "dogList")
-                    .commit()
+                .beginTransaction()
+                .add(R.id.root_layout, ContactListFragment(), "List")
+                .commit()
         }
     }
 
-    override fun onDogSelected(contactModel: ContactModel) {
-        val detailsFragment =
-                ContactDetailsFragment.newInstance(contactModel)
+    fun onContactSelected(contact: ContactModel) {
+        val fragmentDetails = ContactDetailsFragment()
+        val bundle = Bundle()
+        bundle.putInt("contactId", contact.id)
+        fragmentDetails.arguments = bundle
+
         supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.root_layout, detailsFragment, "dogDetails")
-                .addToBackStack(null)
-                .commit()
+            .beginTransaction()
+            .replace(R.id.root_layout, fragmentDetails, "Details")
+            .addToBackStack(null)
+            .commit()
     }
 
 }

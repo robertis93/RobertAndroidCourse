@@ -5,43 +5,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.robertandroidcourse2021.ContactModel
-import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
-
+import kotlinx.android.synthetic.main.fragment_contact_details.*
 
 
 class ContactDetailsFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view: View = inflater.inflate(
+            R.layout.fragment_contact_details, container,
+            false
+        )
 
 
-  companion object {
-
-    private const val CONTACTMODEL = "model"
-
-    fun newInstance(contactModel: ContactModel): ContactDetailsFragment {
-      val args = Bundle()
-      args.putSerializable(CONTACTMODEL, contactModel)
-      val fragment = ContactDetailsFragment()
-      fragment.arguments = args
-      return fragment
+        return view
     }
-  }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val id = arguments!!.getInt("contactId")
+        val contacts = getFakeContacts()
+        val contact = contacts.find { it.id == id }!!
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
-    val fragmentDogDetailsBinding =
-        FragmentContactDetailsBinding.inflate(inflater, container, false)
-
-
-    val model = arguments!!.getSerializable(CONTACTMODEL) as ContactModel
-    fragmentDogDetailsBinding.contactModel = model
-    //model.text = String.format(getString(R.string.description_format), model.description)
-    return fragmentDogDetailsBinding.root
-  }
-
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-
-  }
+        contactImageDetail.setImageResource(contact.imageResId)
+        nameDetail.text = contact.name
+        contactNumberOne.text = contact.numberOne
+        contactNumberTwo.text = contact.numberOne
+        emailFirst.text = contact.emailFirst
+        emailSecond.text = contact.emailSecond
+        description.text = contact.description
+    }
 
 }
