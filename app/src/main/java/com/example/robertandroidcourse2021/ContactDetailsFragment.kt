@@ -5,21 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_contact_details.*
+import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
 
 
 class ContactDetailsFragment : Fragment() {
+
+    lateinit var binding: FragmentContactDetailsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view: View = inflater.inflate(
-            R.layout.fragment_contact_details, container,
-            false
-        )
+    ): View {
+        binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-
-        return view
+    companion object {
+        fun getNewInstance(id: Int) =
+            ContactDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("contactId", id)
+                }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,13 +34,13 @@ class ContactDetailsFragment : Fragment() {
         val contacts = getFakeContacts()
         val contact = contacts.find { it.id == id }!!
 
-        contactImageDetail.setImageResource(contact.imageResId)
-        nameDetail.text = contact.name
-        contactNumberOne.text = contact.numberOne
-        contactNumberTwo.text = contact.numberOne
-        emailFirst.text = contact.emailFirst
-        emailSecond.text = contact.emailSecond
-        description.text = contact.description
+        binding.contactImageDetail.setImageResource(contact.imageResId)
+        binding.nameDetail.text = contact.name
+        binding.contactNumberOne.text = contact.numberOne
+        binding.contactNumberTwo.text = contact.numberOne
+        binding.emailFirst.text = contact.emailFirst
+        binding.emailSecond.text = contact.emailSecond
+        binding.description.text = contact.description
     }
 
 }

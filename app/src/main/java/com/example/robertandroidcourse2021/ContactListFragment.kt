@@ -10,25 +10,24 @@ import kotlinx.android.synthetic.main.fragment_contact_list.*
 
 
 class ContactListFragment : Fragment() {
-
-    private var fragmentDemoBinding: FragmentContactListBinding? = null
+    lateinit var binding: FragmentContactListBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view: View = inflater.inflate(
-            R.layout.fragment_contact_list, container,
-            false
-        )
-        return view
+        binding = FragmentContactListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    companion object{
+        fun getNewInstance() =
+            ContactListFragment()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentContactListBinding.bind(view)
-        fragmentDemoBinding = binding
         val contacts = getFakeContacts()
         val contact = contacts[0]
         contact_image.setImageResource(contact.imageResId)
@@ -38,11 +37,4 @@ class ContactListFragment : Fragment() {
             (activity as? MainActivity)?.onContactSelected(contact)
         }
     }
-
-    override fun onDestroyView() {
-        fragmentDemoBinding = null
-        super.onDestroyView()
-    }
-
-
 }

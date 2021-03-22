@@ -9,25 +9,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val fragment = ContactListFragment.getNewInstance()
 
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.root_layout, ContactListFragment(), "List")
+                .add(R.id.root_layout, fragment, "List")
                 .commit()
         }
     }
 
     fun onContactSelected(contact: ContactModel) {
-        val fragmentDetails = ContactDetailsFragment()
-        val bundle = Bundle()
-        bundle.putInt("contactId", contact.id)
-        fragmentDetails.arguments = bundle
+        val fragment = ContactDetailsFragment.getNewInstance(contact.id)
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_layout, fragmentDetails, "Details")
+            .replace(R.id.root_layout, fragment, "Details")
             .addToBackStack(null)
             .commit()
     }
