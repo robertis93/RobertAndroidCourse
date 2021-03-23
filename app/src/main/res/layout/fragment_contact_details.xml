@@ -7,28 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        tools:ignore="RtlHardcoded">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary">
-                <TextView
+                android:background="@color/colorPrimary"
+                app:title="@string/contactdetailsfragment">
 
-                    android:textSize="24sp"
-                    android:gravity="center"
-                    android:text="@string/contactdetailsfragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
             </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
@@ -96,6 +87,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
