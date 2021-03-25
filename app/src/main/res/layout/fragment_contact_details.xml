@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:title="@string/contactdetailsfragment">
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/contactImageDetail"
+                    android:layout_width="120dp"
+                    android:layout_height="180dp"
+                    android:layout_margin="14sp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null"
+                    android:scaleType="centerInside"
+                    />
+
+                <TextView
+                    android:id="@+id/nameDetail"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="193dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="14sp"
+                    android:padding="16sp"
+                    android:paddingStart="16sp"
+ />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contactNumberOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14sp"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/contactNumberTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14sp"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/emailFirst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14sp"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/emailSecond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14sp"
+                android:textSize="24sp" />
+
+            <TextView
+
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14sp"
+                android:text="@{contactModel.description}"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
