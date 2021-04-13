@@ -31,8 +31,8 @@ class ContactDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getInt("contactId")
-        val contacts = getFakeContacts()
-        val contact = contacts.find { it.id == id }!!
+        val service = (activity as?  ServiceProvider)?.getService()!!
+        val contact = service.getContactDetails(id)
 
         binding.contactImageDetail.setImageResource(contact.imageResId)
         binding.nameDetail.text = contact.name
