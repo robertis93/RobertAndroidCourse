@@ -6,14 +6,7 @@ import android.os.Binder
 import android.os.IBinder
 
 
-/*interface ContactProvider{
-    fun getContactList(): List<ContactModel>
-    fun getContactDetails(id : Int):ContactModel
-}
-*
- */
-
-class ContactService : Service(){
+class ContactService : Service() {
 
     private val binder = ContactServiceBinder()
 
@@ -22,18 +15,18 @@ class ContactService : Service(){
         return binder
 
     }
-//чтобы получить объект ContactService
-    inner class ContactServiceBinder : Binder(){
-        suspend fun getService() : ContactService = this@ContactService
+
+    inner class ContactServiceBinder : Binder() {
+        suspend fun getService(): ContactService = this@ContactService
 
     }
 
-   fun getContactList(): List<ContactModel>{
+    fun getContactList(): List<ContactModel> {
         return getFakeContacts()
     }
 
-    fun getContactDetails(id : Int):ContactModel{
-        return getFakeContacts().find{it.id == id}!!
+    fun getContactDetails(id: Int): ContactModel {
+        return getFakeContacts().find { it.id == id }!!
     }
 }
 

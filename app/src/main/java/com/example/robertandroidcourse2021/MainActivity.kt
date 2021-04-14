@@ -16,28 +16,26 @@ interface ServiceProvider {
 
 class MainActivity : AppCompatActivity(), ServiceProvider {
 
-
     lateinit var contactService: ContactService
-
     private var isBounded = false
 
-            override fun getService() = ContactService()
+    override fun getService() = ContactService()
 
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ContactService.ContactServiceBinder
-            GlobalScope.launch { contactService = binder.getService()
-            //contactService.getContactList()
-            isBounded = true
+            GlobalScope.launch {
+                contactService = binder.getService()
+                //contactService.getContactList()
+                isBounded = true
 
-        }
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             isBounded = false
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

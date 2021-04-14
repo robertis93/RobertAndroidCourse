@@ -1,4 +1,4 @@
- package com.example.robertandroidcourse2021
+package com.example.robertandroidcourse2021
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,7 @@ class ContactListFragment : Fragment() {
         return binding.root
     }
 
-    companion object{
+    companion object {
         fun getNewInstance() =
             ContactListFragment().apply {
                 arguments = Bundle().apply {
@@ -33,7 +33,7 @@ class ContactListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val service = (activity as?  ServiceProvider)?.getService()!!
+        val service = (activity as? ServiceProvider)?.getService()!!
         val contacts = service.getContactList()
         val contact = contacts[0]
         contact_image.setImageResource(contact.imageResId)
