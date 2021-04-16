@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">RobertAndroidCourse</string>
-  <string name="description_format">%1$s\n\n%2$s</string>
-  <string name="contactdetailsfragment">ContactDetailsFragment</string>
-  <string name="contactlistfragment">ContactListFragment</string>
+    <string name="app_name">RobertAndroidCourse</string>
+    <string name="contact_details_fragment">ContactDetailsFragment</string>
+    <string name="contact_list_fragment">ContactListFragment</string>
 </resources>

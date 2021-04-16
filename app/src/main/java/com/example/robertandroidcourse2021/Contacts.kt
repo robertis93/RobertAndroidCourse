@@ -10,5 +10,5 @@ fun getFakeContacts() = listOf(
         "usein@gmail.com",
         "useinbolt@gmail.com",
         "An eight-time Olympic gold medallist"
-        )
+    )
 )

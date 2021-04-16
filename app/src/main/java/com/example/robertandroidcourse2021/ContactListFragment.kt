@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.robertandroidcourse2021.databinding.FragmentContactListBinding
-import kotlinx.android.synthetic.main.fragment_contact_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ContactListFragment : Fragment() {
@@ -21,26 +24,35 @@ class ContactListFragment : Fragment() {
     }
 
     companion object {
-        fun getNewInstance() =
-            ContactListFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
+        fun getNewInstance() = ContactListFragment()
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val service = (activity as? ServiceProvider)?.getService()!!
-        val contacts = service.getContactList()
-        val contact = contacts[0]
-        contact_image.setImageResource(contact.imageResId)
-        binding.name.text = contact.name
-        binding.contactNumber.text = contact.numberOne
-        binding.contactLayout.setOnClickListener {
-            (activity as? MainActivity)?.onContactSelected(contact)
+        CoroutineScope(Dispatchers.IO).launch {
+            val service = (activity as? ServiceProvider)?.getService()
+            val contacts = service?.getContactList()
+            withContext(Dispatchers.Main) {
+                val contact = contacts?.get(0)
+                with(binding.contactImNaPh) {
+                    if (contact != null) {
+                        contactImage.setImageResource(contact.imageResId)
+                    }
+                    if (contact != null) {
+                        name.text = contact.name
+                    }
+                    if (contact != null) {
+                        contactNumber.text = contact.numberOne
+                    }
+                }
+                binding.contactLayout.setOnClickListener {
+                    if (contact != null) {
+                        (activity as? MainActivity)?.onContactSelected(contact)
+                    }
+                }
+            }
         }
+
+
     }
 }
