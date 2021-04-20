@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class ContactDetailsFragment : Fragment() {
 
-    lateinit var binding: FragmentContactDetailsBinding
+    private lateinit var binding: FragmentContactDetailsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,47 +25,27 @@ class ContactDetailsFragment : Fragment() {
     companion object {
         fun getNewInstance(id: Int) =
             ContactDetailsFragment().apply {
-                arguments = bundleOf(Pair("contactId", id))
-                }
+                arguments = bundleOf("contactId" to id)
             }
-
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getInt("contactId")
-
-        CoroutineScope(IO).launch {
-            val service = (activity as? ServiceProvider)?.getService()!!
-            val contact = service.getContactDetails(id)
-            withContext(Main) {
-
+        if (MainActivity.mBound)
+            lifecycleScope.launch {
+                val service = (activity as? ServiceProvider)?.getService()!!
+                val contact = service.getContactDetails(id) ?: return@launch
                 with(binding) {
-                    if (contact != null) {
-                        contactImageDetail.setImageResource(contact.imageResId)
-                    }
-                    if (contact != null) {
-                        nameDetail.text = contact.name
-                    }
-                    if (contact != null) {
-                        contactNumberOne.text = contact.numberOne
-                    }
-                    if (contact != null) {
-                        contactNumberTwo.text = contact.numberOne
-                    }
-                    if (contact != null) {
-                        emailFirst.text = contact.emailFirst
-                    }
-                    if (contact != null) {
-                        emailSecond.text = contact.emailSecond
-                    }
-                    if (contact != null) {
-                        description.text = contact.description
-                    }
+                    contactImageDetail.setImageResource(contact.imageResId)
+                    nameDetail.text = contact.name
+                    contactNumberOne.text = contact.numberOne
+                    contactNumberTwo.text = contact.numberOne
+                    emailFirst.text = contact.emailFirst
+                    emailSecond.text = contact.emailSecond
+                    description.text = contact.description
 
                 }
             }
-        }
-
     }
-
 }

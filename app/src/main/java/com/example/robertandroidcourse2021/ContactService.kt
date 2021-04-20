@@ -20,7 +20,7 @@ class ContactService : Service() {
     }
 
     suspend fun getContactList(): List<ContactModel> {
-
+        delay(1000)
         return getFakeContacts()
     }
 

@@ -15,6 +15,11 @@ interface ServiceProvider {
 
 class MainActivity : AppCompatActivity(), ServiceProvider {
 
+    companion object {
+        var mBound: Boolean = false
+    }
+
+
     override fun getService() = ContactService()
 
     private val connection = object : ServiceConnection {
@@ -22,9 +27,11 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ContactService.ContactServiceBinder
             binder.getService()
+            mBound = true
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            mBound = false
         }
     }
 
@@ -32,25 +39,22 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragment = ContactListFragment.getNewInstance()
-
         if (savedInstanceState == null) {
+            val fragment = ContactListFragment.getNewInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.root_layout, fragment, "List")
                 .commit()
+
+            val intent = Intent(this, ContactService::class.java)
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val intent = Intent(this, ContactService::class.java)
-        bindService(intent, connection, Context.BIND_AUTO_CREATE)
-    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         unbindService(connection)
+        mBound = false
     }
 
     fun onContactSelected(contact: ContactModel) {

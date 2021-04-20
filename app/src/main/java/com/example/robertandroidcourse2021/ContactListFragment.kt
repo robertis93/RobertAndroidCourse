@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactListBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class ContactListFragment : Fragment() {
@@ -29,30 +27,19 @@ class ContactListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
+        if (MainActivity.mBound)
+        lifecycleScope.launch {
             val service = (activity as? ServiceProvider)?.getService()
             val contacts = service?.getContactList()
-            withContext(Dispatchers.Main) {
-                val contact = contacts?.get(0)
-                with(binding.contactImNaPh) {
-                    if (contact != null) {
-                        contactImage.setImageResource(contact.imageResId)
-                    }
-                    if (contact != null) {
-                        name.text = contact.name
-                    }
-                    if (contact != null) {
-                        contactNumber.text = contact.numberOne
-                    }
-                }
-                binding.contactLayout.setOnClickListener {
-                    if (contact != null) {
-                        (activity as? MainActivity)?.onContactSelected(contact)
-                    }
-                }
+            val contact = contacts?.get(0) ?: return@launch
+            with(binding.contactImNaPh) {
+                contactImage.setImageResource(contact.imageResId)
+                name.text = contact.name
+                contactNumber.text = contact.numberOne
+            }
+            binding.contactLayout.setOnClickListener {
+                (activity as? MainActivity)?.onContactSelected(contact)
             }
         }
-
-
     }
 }
