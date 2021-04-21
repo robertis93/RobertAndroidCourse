@@ -34,8 +34,8 @@ class ContactDetailsFragment : Fragment() {
         val id = arguments!!.getInt("contactId")
         if (MainActivity.mBound)
             lifecycleScope.launch {
-                val service = (activity as? ServiceProvider)?.getService()!!
-                val contact = service.getContactDetails(id) ?: return@launch
+                val service = (activity as? ServiceProvider)?.getService()
+                val contact = service?.getContactDetails(id) ?: return@launch
                 with(binding) {
                     contactImageDetail.setImageResource(contact.imageResId)
                     nameDetail.text = contact.name

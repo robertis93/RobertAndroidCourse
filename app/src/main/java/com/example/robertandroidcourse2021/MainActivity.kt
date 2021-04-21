@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     companion object {
         var mBound: Boolean = false
     }
-
 
     override fun getService() = ContactService()
 
@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val intent = Intent(this, ContactService::class.java)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
         if (savedInstanceState == null) {
             val fragment = ContactListFragment.getNewInstance()
             supportFragmentManager
@@ -46,8 +48,6 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
                 .add(R.id.root_layout, fragment, "List")
                 .commit()
 
-            val intent = Intent(this, ContactService::class.java)
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
     }
 
