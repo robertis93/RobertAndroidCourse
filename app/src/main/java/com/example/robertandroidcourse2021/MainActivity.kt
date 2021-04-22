@@ -11,22 +11,22 @@ import androidx.appcompat.app.AppCompatActivity
 
 interface ServiceProvider {
     fun getService(): ContactService
+    fun getBound() : Boolean
 }
 
 class MainActivity : AppCompatActivity(), ServiceProvider {
+    private var mBound = false
+    private lateinit var contactService: ContactService
 
-    companion object {
-        var mBound: Boolean = false
-    }
-
-    override fun getService() = ContactService()
+    override fun getService() : ContactService = contactService
+    override fun getBound(): Boolean = mBound
 
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as ContactService.ContactServiceBinder
-            binder.getService()
-            mBound = true
+            val binder = (service as ContactService.ContactServiceBinder) ?: return
+            contactService = binder.getService()
+             mBound = true
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {

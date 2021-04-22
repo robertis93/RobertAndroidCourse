@@ -8,7 +8,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ContactDetailsFragment : Fragment() {
@@ -32,19 +36,21 @@ class ContactDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getInt("contactId")
-        if (MainActivity.mBound)
-            lifecycleScope.launch {
+        val isBound = (activity as ServiceProvider).getBound()
+        if (isBound)
+            CoroutineScope(IO).launch {
                 val service = (activity as? ServiceProvider)?.getService()
                 val contact = service?.getContactDetails(id) ?: return@launch
-                with(binding) {
-                    contactImageDetail.setImageResource(contact.imageResId)
-                    nameDetail.text = contact.name
-                    contactNumberOne.text = contact.numberOne
-                    contactNumberTwo.text = contact.numberOne
-                    emailFirst.text = contact.emailFirst
-                    emailSecond.text = contact.emailSecond
-                    description.text = contact.description
-
+                withContext(Main) {
+                    with(binding) {
+                        contactImageDetail.setImageResource(contact.imageResId)
+                        nameDetail.text = contact.name
+                        contactNumberOne.text = contact.numberOne
+                        contactNumberTwo.text = contact.numberOne
+                        emailFirst.text = contact.emailFirst
+                        emailSecond.text = contact.emailSecond
+                        description.text = contact.description
+                    }
                 }
             }
     }
