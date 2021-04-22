@@ -37,8 +37,15 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val id = intent.getIntExtra("contact_id", -1)
+        val fragment = if (id == -1)
+            ContactListFragment.getNewInstance()
+        else
+            ContactDetailsFragment.getNewInstance(id)
+
         if (savedInstanceState == null) {
-            val fragment = ContactListFragment.getNewInstance()
+            ContactListFragment.getNewInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.root_layout, fragment, "List")
