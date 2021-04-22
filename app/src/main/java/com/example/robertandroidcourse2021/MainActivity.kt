@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     override fun getBound(): Boolean = mBound
 
     private val connection = object : ServiceConnection {
-
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = (service as ContactService.ContactServiceBinder) ?: return
             contactService = binder.getService()
