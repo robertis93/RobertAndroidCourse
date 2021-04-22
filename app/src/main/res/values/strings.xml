@@ -3,4 +3,6 @@
     <string name="app_name">RobertAndroidCourse</string>
     <string name="contact_details_fragment">ContactDetailsFragment</string>
     <string name="contact_list_fragment">ContactListFragment</string>
+    <string name="notification_channel_name">Оповещение</string>
+    <string name="channel_describtion">Описание</string>
 </resources>
