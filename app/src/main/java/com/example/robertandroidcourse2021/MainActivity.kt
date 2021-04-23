@@ -19,10 +19,7 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     private var mBound = false
     private lateinit var contactService: ContactService
 
-    override fun getService(): ContactService {
-        return contactService
-    }
-
+    override fun getService(): ContactService = contactService
     override fun getBound(): Boolean = mBound
 
     private val connection = object : ServiceConnection {
@@ -40,8 +37,15 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val id = intent.getIntExtra("contact_id", -1)
+        val fragment = if (id == -1)
+            ContactListFragment.getNewInstance()
+        else
+            ContactDetailsFragment.getNewInstance(id)
+
         if (savedInstanceState == null) {
-            val fragment = ContactListFragment.getNewInstance()
+            ContactListFragment.getNewInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.root_layout, fragment, "List")
@@ -49,6 +53,7 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
 
             val intent = Intent(this, ContactService::class.java)
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
+
         }
     }
 

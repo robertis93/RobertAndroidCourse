@@ -5,6 +5,8 @@ fun getFakeContacts() = listOf(
         1,
         R.drawable.usein,
         "Usein",
+        23,
+        4,
         "+79456456465",
         "+787897897",
         "usein@gmail.com",
