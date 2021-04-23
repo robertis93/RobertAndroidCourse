@@ -2,6 +2,7 @@ package com.example.robertandroidcourse2021
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,17 +31,13 @@ class ContactListFragment : Fragment() {
         fun getNewInstance() = ContactListFragment()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val isBound = (activity as ServiceProvider).getBound()
-        //if (isBound)
-            CoroutineScope(IO).launch {
-                val service = (activity as? ServiceProvider)?.getService()
+        if (isBound) {
+            val job = CoroutineScope(IO).launch {
+                val service = (activity as? MainActivity)?.getService()
                 val contacts = service?.getContactList()
                 val contact = contacts?.get(0) ?: return@launch
                 withContext(Main) {
@@ -54,6 +51,7 @@ class ContactListFragment : Fragment() {
                     }
                 }
             }
+        }
     }
 }
 
