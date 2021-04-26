@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 
 
 class ContactListFragment : Fragment() {
+
     lateinit var binding: FragmentContactListBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +34,10 @@ class ContactListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val isBound = (activity as ServiceProvider).getBound()
         if (isBound) {
-            val job = CoroutineScope(IO).launch {
-                val service = (activity as? MainActivity)?.getService()
+            lifecycleScope.launch(IO) {
+                val service = (activity as? ServiceProvider)?.getService()
                 val contacts = service?.getContactList()
                 val contact = contacts?.get(0) ?: return@launch
                 withContext(Main) {

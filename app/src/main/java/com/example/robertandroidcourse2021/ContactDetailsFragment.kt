@@ -38,7 +38,7 @@ class ContactDetailsFragment : Fragment() {
         val id = arguments!!.getInt("contactId")
         val isBound = (activity as ServiceProvider).getBound()
         if (isBound)
-            CoroutineScope(IO).launch {
+            lifecycleScope.launch(IO) {
                 val service = (activity as? ServiceProvider)?.getService()
                 val contact = service?.getContactDetails(id) ?: return@launch
                 withContext(Main) {

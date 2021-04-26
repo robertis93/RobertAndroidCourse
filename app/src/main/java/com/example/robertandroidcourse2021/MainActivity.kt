@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
             val binder = (service as ContactService.ContactServiceBinder) ?: return
             contactService = binder.getService()
             mBound = true
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.root_layout, ContactListFragment.getNewInstance(), "List")
+                .commit()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -40,17 +44,10 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
-            val fragment = ContactListFragment.getNewInstance()
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.root_layout, fragment, "List")
-                .commit()
-
-            val intent = Intent(this, ContactService::class.java)
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
+        val intent = Intent(this, ContactService::class.java)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
