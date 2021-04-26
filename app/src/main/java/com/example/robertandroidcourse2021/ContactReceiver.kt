@@ -25,7 +25,7 @@ class ContactReceiver : BroadcastReceiver() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             intent.putExtra("contact_id", id)
-            val pendingIntent= PendingIntent.getActivity(context, 0, intent, 0)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
             val notification = NotificationCompat.Builder(context, channel_id)
                 .setSmallIcon(R.drawable.usein)
@@ -40,8 +40,6 @@ class ContactReceiver : BroadcastReceiver() {
     }
 
     private fun createNotificationChannel(context: Context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_name)
             val descriptionText = context.getString(R.string.channel_describtion)
@@ -49,7 +47,7 @@ class ContactReceiver : BroadcastReceiver() {
             val channel = NotificationChannel(channel_id, name, importance).apply {
                 description = descriptionText
             }
-            // Register the channel with the system
+
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)

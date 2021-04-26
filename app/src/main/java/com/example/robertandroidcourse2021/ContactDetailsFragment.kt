@@ -13,13 +13,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 
 class ContactDetailsFragment : Fragment() {
@@ -44,8 +42,8 @@ class ContactDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getInt("contactId")
         val isBound = (activity as ServiceProvider).getBound()
-        if (isBound) {
-            val job = CoroutineScope(IO).launch {
+        if (isBound)
+            lifecycleScope.launch(IO) {
                 val service = (activity as? ServiceProvider)?.getService()
                 val contact = service?.getContactDetails(id) ?: return@launch
                 withContext(Main) {
@@ -59,23 +57,42 @@ class ContactDetailsFragment : Fragment() {
                         emailFirst.text = contact.emailFirst
                         emailSecond.text = contact.emailSecond
                         description.text = contact.description
-
+                        setButtonTitle(getAlreadySubscribe(contact))
                         btnNtf.setOnClickListener {
-                            val alreadySubscribe = false
-                            if (alreadySubscribe)
-                                canselAlarm()
-                            else
-                                setAlarm()
-
+                            val alreadySubscribe = getAlreadySubscribe(contact)
+                            if (alreadySubscribe) {
+                                cancelAlarm(contact)
+                                setButtonTitle(false)
+                            } else {
+                                setAlarm(contact)
+                                setButtonTitle(true)
+                            }
                         }
                     }
                 }
             }
-            job.cansel()
-        }
     }
 
-    private suspend fun setAlarm(contact: ContactModel) {
+    private fun setButtonTitle(isSubscribed: Boolean) {
+        binding.btnNtf.text = if (isSubscribed)
+            "Выключить напоминания"
+        else
+            "Включить напоминания"
+    }
+
+    private fun getAlreadySubscribe(contact: ContactModel): Boolean {
+        val intent = Intent(requireContext(), ContactReceiver::class.java)
+        val alarmIntent =
+            PendingIntent.getBroadcast(
+                requireContext(),
+                contact.id,
+                intent,
+                PendingIntent.FLAG_NO_CREATE
+            )
+        return alarmIntent != null
+    }
+
+    private fun setAlarm(contact: ContactModel) {
         val alarmManager =
             requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val text = "Сегодня дерь рождение у ${contact.name}"
@@ -94,11 +111,27 @@ class ContactDetailsFragment : Fragment() {
         )
     }
 
-    private suspend fun canselAlarm(contact: ContactModel) {
+    fun cancelAlarm(contact: ContactModel) {
+        val alarmManager =
+            requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val text = "Сегодня дерь рождение у ${contact.name}"
+        val intent = Intent(requireContext(), ContactReceiver::class.java)
+        intent.putExtra("text", text)
+        intent.putExtra("id", contact.id)
 
+        val alarmIntent =
+            PendingIntent.getBroadcast(
+                requireContext(),
+                contact.id,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT
+            )
+
+        alarmManager.cancel(alarmIntent)
+        alarmIntent.cancel()
     }
 
-    private suspend fun getDateToExecute(contact: ContactModel): Calendar {
+    fun getDateToExecute(contact: ContactModel): Calendar {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         val currentyear = calendar.get(Calendar.YEAR)
@@ -111,5 +144,6 @@ class ContactDetailsFragment : Fragment() {
         calendar.set(Calendar.MONTH, contact.monthOfBirth)
         calendar.set(Calendar.DAY_OF_MONTH, contact.dayOfBirth)
         calendar.set(Calendar.YEAR, currentyear)
+        return calendar
     }
 }
