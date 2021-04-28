@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactDetailsBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -36,9 +35,9 @@ class ContactDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments!!.getInt("contactId")
-        val isBound = (activity as ServiceProvider).getBound()
-        if (isBound)
-            lifecycleScope.launch(IO) {
+        lifecycleScope.launch(IO) {
+            val isBound = (activity as ServiceProvider).getBound()
+            if (isBound) {
                 val service = (activity as? ServiceProvider)?.getService()
                 val contact = service?.getContactDetails(id) ?: return@launch
                 withContext(Main) {
@@ -53,5 +52,6 @@ class ContactDetailsFragment : Fragment() {
                     }
                 }
             }
+        }
     }
 }

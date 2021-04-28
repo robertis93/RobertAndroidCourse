@@ -11,15 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 interface ServiceProvider {
-    fun getService(): ContactService
+    fun getService(): ContactService?
     fun getBound(): Boolean
 }
 
 class MainActivity : AppCompatActivity(), ServiceProvider {
     private var mBound = false
-    private lateinit var contactService: ContactService
+    private var contactService: ContactService? = null
 
-    override fun getService(): ContactService {
+    override fun getService(): ContactService? {
         return contactService
     }
 
@@ -44,15 +44,18 @@ class MainActivity : AppCompatActivity(), ServiceProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val intent = Intent(this, ContactService::class.java)
-        bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        if (!mBound) {
+            val intent = Intent(this, ContactService::class.java)
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
     }
 
-
     override fun onDestroy() {
+        if (mBound) {
+            unbindService(connection)
+            mBound = false
+        }
         super.onDestroy()
-        unbindService(connection)
-        mBound = false
     }
 
     fun onContactSelected(contact: ContactModel) {

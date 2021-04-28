@@ -1,15 +1,12 @@
 package com.example.robertandroidcourse2021
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.robertandroidcourse2021.databinding.FragmentContactListBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -34,21 +31,21 @@ class ContactListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isBound = (activity as ServiceProvider).getBound()
-        if (isBound) {
-            lifecycleScope.launch(IO) {
-                val service = (activity as? ServiceProvider)?.getService()
-                val contacts = service?.getContactList()
-                val contact = contacts?.get(0) ?: return@launch
-                withContext(Main) {
-                    with(binding.contactImNaPh) {
-                        contactImage.setImageResource(contact.imageResId)
-                        name.text = contact.name
-                        contactNumber.text = contact.numberOne
-                    }
-                    binding.contactImNaPh.root.setOnClickListener {
-                        (activity as? MainActivity)?.onContactSelected(contact)
-                    }
+        lifecycleScope.launch(IO) {
+            val isBound = (activity as ServiceProvider).getBound()
+            if (!isBound) {
+            }
+            val service = (activity as? ServiceProvider)?.getService()
+            val contacts = service?.getContactList()
+            val contact = contacts?.get(0) ?: return@launch
+            withContext(Main) {
+                with(binding.contactImNaPh) {
+                    contactImage.setImageResource(contact.imageResId)
+                    name.text = contact.name
+                    contactNumber.text = contact.numberOne
+                }
+                binding.contactImNaPh.root.setOnClickListener {
+                    (activity as? MainActivity)?.onContactSelected(contact)
                 }
             }
         }
